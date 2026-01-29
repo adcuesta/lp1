@@ -43,5 +43,17 @@ body {
   background: linear-gradient(to bottom,
       transparent,
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif;
+}
+
+/* Ensure emoji flags render properly */
+.emoji-flag {
+  font-family: 'Noto Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Apple Color Emoji', 'Twemoji Mozilla', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  display: inline-block;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variant-emoji: emoji;
 }

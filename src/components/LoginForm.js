@@ -9,11 +9,11 @@ const getDefaultCountry = (config) => {
     if (!config.countryCodes || config.countryCodes.length === 0) {
         return { code: "+971", country: "UAE", flag: "🇦🇪" };
     }
-    
+
     // If we have a domain, try to match it to a country
     if (config.domain) {
         const domainLower = config.domain.toLowerCase();
-        
+
         // Map landing page names/domains to country codes
         const countryMapping = {
             'oman': '+968',
@@ -25,7 +25,7 @@ const getDefaultCountry = (config) => {
             'egypt': '+20',
             'jordan': '+962'
         };
-        
+
         // Check if domain contains any country identifier
         for (const [countryKey, countryCode] of Object.entries(countryMapping)) {
             if (domainLower.includes(countryKey)) {
@@ -36,7 +36,7 @@ const getDefaultCountry = (config) => {
             }
         }
     }
-    
+
     // Default to first country in the list
     return config.countryCodes[0];
 };
@@ -119,13 +119,13 @@ export default function LoginForm({ config }) {
                     <button
                         type="button"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="pl-3 pr-2 py-3 flex items-center gap-2 text-gray-700 border-r border-gray-200 hover:bg-gray-50 transition-colors rounded-l-xl"
+                        className="pl-3 pr-2 py-3 flex items-center gap-1.5 text-gray-700 border-r border-gray-200 hover:bg-gray-50 transition-colors rounded-l-xl min-w-[120px]"
                     >
-                        <span className="text-xl">{selectedCountry.flag}</span>
-                        <span className="text-sm font-semibold">{selectedCountry.code}</span>
+                        <span className="text-lg leading-none emoji-flag">{selectedCountry.flag}</span>
+                        <span className="text-sm font-semibold whitespace-nowrap">{selectedCountry.code}</span>
                         <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
-                    
+
                     {/* Dropdown Menu */}
                     <AnimatePresence>
                         {isDropdownOpen && (
@@ -135,9 +135,9 @@ export default function LoginForm({ config }) {
                                 exit={{ opacity: 0, y: -10 }}
                                 className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl z-50 min-w-[200px] max-h-60 overflow-y-auto"
                             >
-                                {config.countryCodes?.map((country, index) => (
+                                {config.countryCodes?.map((country) => (
                                     <button
-                                        key={index}
+                                        key={country.code}
                                         type="button"
                                         onClick={() => {
                                             setSelectedCountry(country);
@@ -145,7 +145,7 @@ export default function LoginForm({ config }) {
                                         }}
                                         className="w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors text-left"
                                     >
-                                        <span className="text-2xl">{country.flag}</span>
+                                        <span className="text-xl leading-none emoji-flag">{country.flag}</span>
                                         <div className="flex-1">
                                             <div className="font-semibold text-gray-800">{country.country}</div>
                                             <div className="text-sm text-gray-500">{country.code}</div>
@@ -186,19 +186,17 @@ export default function LoginForm({ config }) {
             {config.availableLanguages && (
                 <div className="mt-8 flex justify-center gap-3">
                     {config.availableLanguages.map((lang, index) => (
-                        <>
-                            {index > 0 && <div key={`sep-${index}`} className="w-px h-5 bg-gray-300"></div>}
-                            <button 
-                                key={lang.code}
-                                className={`font-bold transition-colors ${
-                                    config.language === lang.code 
-                                        ? 'border border-gray-800 px-2 rounded-md text-gray-800' 
-                                        : 'text-gray-400 hover:text-gray-800'
-                                }`}
+                        <div key={lang.code} className="flex items-center gap-3">
+                            {index > 0 && <div className="w-px h-5 bg-gray-300"></div>}
+                            <button
+                                className={`font-bold transition-colors ${config.language === lang.code
+                                    ? 'border border-gray-800 px-2 rounded-md text-gray-800'
+                                    : 'text-gray-400 hover:text-gray-800'
+                                    }`}
                             >
                                 {lang.label}
                             </button>
-                        </>
+                        </div>
                     ))}
                 </div>
             )}
