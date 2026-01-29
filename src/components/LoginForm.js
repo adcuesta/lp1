@@ -4,11 +4,48 @@ import { useState } from "react";
 import { Smartphone, CheckCircle, AlertCircle, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Helper function to get default country based on domain or first in list
+const getDefaultCountry = (config) => {
+    if (!config.countryCodes || config.countryCodes.length === 0) {
+        return { code: "+971", country: "UAE", flag: "🇦🇪" };
+    }
+    
+    // If we have a domain, try to match it to a country
+    if (config.domain) {
+        const domainLower = config.domain.toLowerCase();
+        
+        // Map landing page names/domains to country codes
+        const countryMapping = {
+            'oman': '+968',
+            'uae': '+971',
+            'saudi': '+966',
+            'kuwait': '+965',
+            'bahrain': '+973',
+            'qatar': '+974',
+            'egypt': '+20',
+            'jordan': '+962'
+        };
+        
+        // Check if domain contains any country identifier
+        for (const [countryKey, countryCode] of Object.entries(countryMapping)) {
+            if (domainLower.includes(countryKey)) {
+                const matchedCountry = config.countryCodes.find(c => c.code === countryCode);
+                if (matchedCountry) {
+                    return matchedCountry;
+                }
+            }
+        }
+    }
+    
+    // Default to first country in the list
+    return config.countryCodes[0];
+};
+
 export default function LoginForm({ config }) {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [isValid, setIsValid] = useState(false);
     const [error, setError] = useState("");
-    const [selectedCountry, setSelectedCountry] = useState(config.countryCodes?.[0] || { code: "+971", country: "UAE", flag: "🇦🇪" });
+    const [selectedCountry, setSelectedCountry] = useState(getDefaultCountry(config));
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const handlePhoneChange = (e) => {
@@ -72,17 +109,20 @@ export default function LoginForm({ config }) {
 
             {/* Phone Input */}
             <div
-                className={`relative flex items-center bg-transparent border-2 rounded-xl p-1 mb-6 transition-colors duration-300 ${error ? 'border-red-400 bg-red-50' : 'border-[#00C2E0] bg-cyan-50/10'}`}
+                className={`relative flex items-center bg-transparent border-2 rounded-xl p-1 mb-6 transition-colors duration-300 ${error ? 'border-red-400 bg-red-50' : 'bg-cyan-50/10'}`}
+                style={{
+                    borderColor: error ? undefined : config.primaryColor || '#00C2E0'
+                }}
             >
                 {/* Country Code Dropdown */}
                 <div className="relative">
                     <button
                         type="button"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="pl-4 pr-2 py-3 flex items-center gap-2 text-gray-700 font-bold text-lg border-r border-gray-200 hover:bg-gray-50 transition-colors rounded-l-xl"
+                        className="pl-3 pr-2 py-3 flex items-center gap-2 text-gray-700 border-r border-gray-200 hover:bg-gray-50 transition-colors rounded-l-xl"
                     >
-                        <span className="text-2xl">{selectedCountry.flag}</span>
-                        <span>{selectedCountry.code}</span>
+                        <span className="text-xl">{selectedCountry.flag}</span>
+                        <span className="text-sm font-semibold">{selectedCountry.code}</span>
                         <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
                     
