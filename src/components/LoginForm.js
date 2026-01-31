@@ -95,7 +95,7 @@ export default function LoginForm({ config }) {
 
         try {
             console.log('📱 Generating PIN for:', phoneNumber);
-            console.log('📊 Campaign ID:', config.campaignId);
+            console.log('📊 Service ID:', config.serviceId);
             console.log('🔑 Click ID:', clickId);
 
             const response = await fetch('https://kidoz.xyz/api/publisher/pin-generation/', {
@@ -105,7 +105,7 @@ export default function LoginForm({ config }) {
                 },
                 body: JSON.stringify({
                     msisdn: phoneNumber,
-                    service: config.campaignId?.toString() || "22",
+                    service: config.serviceId?.toString() || "37",
                     pub_id: config.publisherId?.toString() || "13",
                     click_id: clickId
                 })
@@ -148,7 +148,7 @@ export default function LoginForm({ config }) {
                 },
                 body: JSON.stringify({
                     msisdn: phoneNumber,
-                    service: config.campaignId?.toString() || "22",
+                    service: config.serviceId?.toString() || "37",
                     pub_id: config.publisherId?.toString() || "13",
                     click_id: clickId,
                     pin: otp
