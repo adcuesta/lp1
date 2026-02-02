@@ -183,7 +183,7 @@ export default function LoginForm({ config }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="relative z-10 w-full max-w-md p-8 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50"
+            className="relative z-10 w-full sm:max-w-md min-h-screen sm:min-h-0 p-6 sm:p-8 bg-white/80 backdrop-blur-xl rounded-none sm:rounded-3xl shadow-2xl border-0 sm:border border-white/50 flex flex-col justify-center"
         >
             {/* Back Button - Only show on OTP screen */}
             {showOtpInput && (

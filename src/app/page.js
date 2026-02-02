@@ -38,7 +38,7 @@ export default async function Home() {
                 ></div>
             </div>
 
-            <div className="z-10 w-full flex justify-center px-4">
+            <div className="z-10 w-full h-full sm:h-auto flex justify-center items-stretch sm:items-center px-0 sm:px-4">
                 <LoginForm config={config} />
             </div>
 
