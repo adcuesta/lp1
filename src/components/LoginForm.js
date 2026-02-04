@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Smartphone, CheckCircle, AlertCircle, ChevronDown, Loader2, ArrowLeft } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 
 // Helper function to generate unique click ID
 const generateClickId = () => {
@@ -58,6 +58,18 @@ export default function LoginForm({ config }) {
     const [otp, setOtp] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [clickId] = useState(generateClickId());
+
+    // Scroll animation for language buttons
+    const { scrollY } = useScroll();
+    const [hasScrolled, setHasScrolled] = useState(false);
+    const languageOpacity = useTransform(scrollY, [0, 20], [0, 1]);
+    const languageY = useTransform(scrollY, [0, 20], [10, 0]);
+
+    useEffect(() => {
+        return scrollY.on("change", (latest) => {
+            setHasScrolled(latest > 5);
+        });
+    }, [scrollY]);
 
     const handlePhoneChange = (e) => {
         const value = e.target.value;
@@ -363,7 +375,7 @@ export default function LoginForm({ config }) {
                         )}
                     </button>
 
-                    {/* Back Button */}
+                    {/* Change Phone Number Button */}
                     <button
                         onClick={() => {
                             setShowOtpInput(false);
@@ -377,26 +389,6 @@ export default function LoginForm({ config }) {
                     </button>
                 </>
             )}
-
-            {/* Language Toggle */}
-            {config.availableLanguages && (
-                <div className="mt-8 flex justify-center gap-3">
-                    {config.availableLanguages.map((lang, index) => (
-                        <div key={lang.code} className="flex items-center gap-3">
-                            {index > 0 && <div className="w-px h-5 bg-gray-300"></div>}
-                            <button
-                                className={`font-bold transition-colors ${config.language === lang.code
-                                    ? 'border border-gray-800 px-2 rounded-md text-gray-800'
-                                    : 'text-gray-400 hover:text-gray-800'
-                                    }`}
-                            >
-                                {lang.label}
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            )}
-
         </motion.div>
     );
 }
